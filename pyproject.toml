@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "stories-translator"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.31.0"
+trafilatura = "^1.8.1"
+nltk = "^3.8.1"
+deepl = "^1.17.0"
+pysbd = "^0.3.4"
+spacy = "^3.7.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
