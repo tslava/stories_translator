@@ -1,6 +1,10 @@
+from typing import Dict
+from typing import List
+
 import requests
 import json
 
+from deepl import Formality
 from deepl import SplitSentences
 from deepl import Translator
 
@@ -9,7 +13,7 @@ from src.splitter import split_into_sentences
 DEEPL_AUTH_KEY = "ac85b0d0-8563-45c4-87fc-616641063eb8:fx"
 
 
-def translate_sentences(text):
+def translate_sentences(text: List[str]) -> List[Dict[str, str]]:
     '''
     :param text: массив предложений
     :return: массив словарей, где ключ - язык, значение - предложение.
@@ -22,6 +26,7 @@ def translate_sentences(text):
         text=text,
         source_lang="PL",
         target_lang="RU",
+        formality=Formality.MORE,
         # split_sentences=SplitSentences.ALL
     )
 

@@ -14,11 +14,9 @@ def extract_text(url):
         # favor_recall=True,
     )
 
-    filename = save_text_to_file('url_extracted_text', result)
-
     print(f"Done.\n")
 
-    return result, filename
+    return result
 
 
 if __name__ == "__main__":

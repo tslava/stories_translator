@@ -1,8 +1,15 @@
+from enum import Enum
 from typing import Dict
 from typing import List
 
 
-def format_text(sentences: List[Dict[str, str]]):
+class Language(Enum):
+    RU = 'RU'
+    PL = 'PL'
+    RU_PL = 'RU-PL'
+
+
+def format_text(sentences: List[Dict[str, str]], language: Language):
     '''
 
     :param sentences: массив словарей, где ключ - язык, значение - предложение.
@@ -14,8 +21,16 @@ def format_text(sentences: List[Dict[str, str]]):
     print(f"Formatting text...")
 
     formatted_text = ''
-    for sentence in sentences:
-        formatted_text += f"{sentence['ru']}\n{sentence['pl']}\n\n"
+
+    if language == Language.RU:
+        for sentence in sentences:
+            formatted_text += f"{sentence['ru']} "
+    elif language == Language.PL:
+        for sentence in sentences:
+            formatted_text += f"{sentence['pl']} "
+    elif language == Language.RU_PL:
+        for sentence in sentences:
+            formatted_text += f"{sentence['ru']}\n{sentence['pl']}\n\n"
 
     print(f"Done.\n")
 
