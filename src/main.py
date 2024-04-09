@@ -35,18 +35,18 @@ def run(stage: Stage, suffix: str, url: Optional[str] = None):
         except json.JSONDecodeError:
             raise ValueError("The file with translation does not contain a valid JSON.")
 
-        output_formatted_text_ru_pl = format_text(translated_sentences, Language.RU_PL)
+        output_formatted_text_ru_pl = format_text(suffix, translated_sentences, Language.RU_PL)
         save_text_to_file(suffix, stage, output_formatted_text_ru_pl, lang_suffix=Language.RU_PL.value)
 
-        output_formatted_text_ru = format_text(translated_sentences, Language.RU)
+        output_formatted_text_ru = format_text(suffix, translated_sentences, Language.RU)
         save_text_to_file(suffix, stage, output_formatted_text_ru, lang_suffix=Language.RU.value)
 
         return
 
 
 if __name__ == "__main__":
-    url = "https://rowery.trojmiasto.pl/Do-pracy-jade-rowerem-rusza-konkurs-n187987.html"
-    random_suffix = "rowerem_do_pracy_2"
+    url = "https://pomorska.pl/wieza-klimek-w-grudziadzu-nowa-atrakcja-regionu-wideo-zdjecia/ar/6472962"
+    random_suffix = "Wieża_Klimek_w_Grudziądzu_2015"
 
     # run(stage=Stage.EXTRACT, suffix=random_suffix, url=url)
     # run(stage=Stage.TRANSLATE, suffix=random_suffix)

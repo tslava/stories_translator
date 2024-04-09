@@ -13,6 +13,7 @@ nltk = "^3.8.1"
 deepl = "^1.17.0"
 pysbd = "^0.3.4"
 spacy = "^3.7.4"
+telegraph = "^2.2.0"
 
 
 [build-system]

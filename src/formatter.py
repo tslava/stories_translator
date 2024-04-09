@@ -1,6 +1,9 @@
+import os
 from enum import Enum
 from typing import Dict
 from typing import List
+
+from src.uploader import upload_image
 
 
 class Language(Enum):
@@ -9,9 +12,21 @@ class Language(Enum):
     RU_PL = 'RU-PL'
 
 
-def format_text(sentences: List[Dict[str, str]], language: Language):
+def remove_new_lines(text: str) -> str:
+    return text.replace('\n', '')
+
+
+def get_html_tag_for_image(suffix: str, image_file_name: str) -> str:
+    image_path = os.path.join('generated', suffix, 'images', image_file_name)
+    image_url = upload_image(image_path)
+
+    return image_url
+
+
+def format_text(suffix: str, sentences: List[Dict[str, str]], language: Language):
     '''
 
+    :param suffix:
     :param sentences: массив словарей, где ключ - язык, значение - предложение.
     В каждом словаре содержится перевод исходного предложения на русский и оригинальное польское предложени
     Пример: [{'ru': 'привет', 'pl': 'cześć'}, {'ru': 'как дела?', 'pl': 'jak się masz?'}]
@@ -24,13 +39,31 @@ def format_text(sentences: List[Dict[str, str]], language: Language):
 
     if language == Language.RU:
         for sentence in sentences:
-            formatted_text += f"{sentence['ru']} "
+            if 'ru' in sentence:
+                formatted_text += f"{sentence['ru']} "
+            elif 'img' in sentence:
+                image_url = get_html_tag_for_image(suffix, sentence['img'])
+                formatted_text += f"\n{image_url}\n"
     elif language == Language.PL:
         for sentence in sentences:
-            formatted_text += f"{sentence['pl']} "
+            if 'pl' in sentence:
+                formatted_text += f"{sentence['pl']} "
+            elif 'img' in sentence:
+                image_url = get_html_tag_for_image(suffix, sentence['img'])
+                formatted_text += f"\n{image_url}\n"
     elif language == Language.RU_PL:
         for sentence in sentences:
-            formatted_text += f"{sentence['ru']}\n{sentence['pl']}\n\n"
+            if 'ru' in sentence and 'pl' in sentence:
+                sentence_ru = remove_new_lines(sentence['ru'])
+                sentence_pl = remove_new_lines(sentence['pl'])
+
+                formatted_text += (f"{sentence_ru}"
+                                   f"\n"
+                                   f"{sentence_pl}"
+                                   f"\n\n")
+            elif 'img' in sentence:
+                image_url = get_html_tag_for_image(suffix, sentence['img'])
+                formatted_text += f"{image_url}\n"
 
     print(f"Done.\n")
 
