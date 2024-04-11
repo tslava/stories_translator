@@ -3,6 +3,7 @@ import json
 import nltk
 import pysbd
 import spacy
+from spacy.language import Language
 
 from spacy.lang.pl import Polish
 
@@ -14,6 +15,16 @@ def split_into_sentences(text):
     # nlp = spacy.load('pl_core_news_sm')  # 50 mb
     nlp = spacy.load('pl_core_news_lg')  # 570 mb
     # nlp.enable_pipe("senter")
+
+    @Language.component("set_custom_boundaries")
+    def set_custom_boundaries(doc):
+        for token in doc[:-1]:
+            if token.text == "\n":
+                doc[token.i + 1].is_sent_start = True
+        return doc
+
+    nlp.add_pipe("set_custom_boundaries", before="parser")
+
     doc = nlp(text)
     sentences = [sent.text for sent in doc.sents]
 
