@@ -42,6 +42,7 @@ def save_text_to_file(
     print(f"Saving text to a file {output_filename}...")
 
     create_dir_if_not_exists(os.path.join('generated', suffix))
+    create_dir_if_not_exists(os.path.join('generated', suffix, 'images'))
     path = os.path.join('generated', suffix, output_filename)
 
     with open(path, 'w', encoding='utf-8') as file:
