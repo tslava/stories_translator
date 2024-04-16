@@ -16,17 +16,17 @@ def remove_new_lines(text: str) -> str:
     return text.replace('\n', '')
 
 
-def get_html_tag_for_image(suffix: str, image_file_name: str) -> str:
-    image_path = os.path.join('generated', suffix, 'images', image_file_name)
+def get_html_tag_for_image(title: str, image_file_name: str) -> str:
+    image_path = os.path.join('generated', title, 'images', image_file_name)
     image_url = upload_image(image_path)
 
     return image_url
 
 
-def format_text(suffix: str, sentences: List[Dict[str, str]], language: Language):
+def format_text(title: str, sentences: List[Dict[str, str]], language: Language):
     '''
 
-    :param suffix:
+    :param title:
     :param sentences: массив словарей, где ключ - язык, значение - предложение.
     В каждом словаре содержится перевод исходного предложения на русский и оригинальное польское предложени
     Пример: [{'ru': 'привет', 'pl': 'cześć'}, {'ru': 'как дела?', 'pl': 'jak się masz?'}]
@@ -40,16 +40,16 @@ def format_text(suffix: str, sentences: List[Dict[str, str]], language: Language
     if language == Language.RU:
         for sentence in sentences:
             if 'ru' in sentence:
-                formatted_text += f"{sentence['ru']} "
+                formatted_text += f"{sentence['ru']} "  # TODO: сделать что-то с переносом пробела после символа переноа строки
             elif 'img' in sentence:
-                image_url = get_html_tag_for_image(suffix, sentence['img'])
+                image_url = get_html_tag_for_image(title, sentence['img'])
                 formatted_text += f"\n{image_url}\n"
     elif language == Language.PL:
         for sentence in sentences:
             if 'pl' in sentence:
                 formatted_text += f"{sentence['pl']} "
             elif 'img' in sentence:
-                image_url = get_html_tag_for_image(suffix, sentence['img'])
+                image_url = get_html_tag_for_image(title, sentence['img'])
                 formatted_text += f"\n{image_url}\n"
     elif language == Language.RU_PL:
         for sentence in sentences:
@@ -62,8 +62,12 @@ def format_text(suffix: str, sentences: List[Dict[str, str]], language: Language
                                    f"{sentence_pl}"
                                    f"\n\n")
             elif 'img' in sentence:
-                image_url = get_html_tag_for_image(suffix, sentence['img'])
+                image_url = get_html_tag_for_image(title, sentence['img'])
                 formatted_text += f"{image_url}\n"
+
+    # if language == Language.RU:
+    #     formatted_text.replace('\n ', '\n')
+    #     x=1
 
     print(f"Done.\n")
 
