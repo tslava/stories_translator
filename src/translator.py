@@ -33,7 +33,7 @@ def translate_sentences(text: List[str]) -> List[Dict[str, str]]:
     translated_text = [
         {
             'ru': translation.text,
-            'pl': sentence
+            'pl': sentence.rstrip()
         } for sentence, translation in zip(text, translated_text)]
 
     print(f"Done.\n")
