@@ -37,22 +37,21 @@ def format_text(title: str, sentences: List[Dict[str, str]], language: Language)
 
     formatted_text = ''
 
-    if language == Language.RU:
-        for sentence in sentences:
+    for sentence in sentences:
+        if 'header' in sentence:
+            formatted_text += f"{sentence['header']}\n"
+        if 'footer' in sentence:
+            formatted_text += f"\n{sentence['footer']}"
+        if 'img' in sentence:
+            image_url = get_html_tag_for_image(title, sentence['img'])
+            formatted_text += f"\n{image_url}\n"
+        if language == Language.RU:
             if 'ru' in sentence:
                 formatted_text += f"{sentence['ru']} "  # TODO: сделать что-то с переносом пробела после символа переноа строки
-            elif 'img' in sentence:
-                image_url = get_html_tag_for_image(title, sentence['img'])
-                formatted_text += f"\n{image_url}\n"
-    elif language == Language.PL:
-        for sentence in sentences:
-            if 'pl' in sentence:
-                formatted_text += f"{sentence['pl']} "
-            elif 'img' in sentence:
-                image_url = get_html_tag_for_image(title, sentence['img'])
-                formatted_text += f"\n{image_url}\n"
-    elif language == Language.RU_PL:
-        for sentence in sentences:
+        # elif language == Language.PL:
+        #     if 'pl' in sentence:
+        #         formatted_text += f"{sentence['pl']} "
+        elif language == Language.RU_PL:
             if 'ru' in sentence and 'pl' in sentence:
                 sentence_ru = remove_new_lines(sentence['ru'])
                 sentence_pl = remove_new_lines(sentence['pl'])
@@ -61,13 +60,6 @@ def format_text(title: str, sentences: List[Dict[str, str]], language: Language)
                                    f"\n"
                                    f"{sentence_pl}"
                                    f"\n\n")
-            elif 'img' in sentence:
-                image_url = get_html_tag_for_image(title, sentence['img'])
-                formatted_text += f"{image_url}\n"
-
-    # if language == Language.RU:
-    #     formatted_text.replace('\n ', '\n')
-    #     x=1
 
     print(f"Done.\n")
 

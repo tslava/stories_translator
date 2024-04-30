@@ -13,7 +13,22 @@ from src.splitter import split_into_sentences
 DEEPL_AUTH_KEY = "ac85b0d0-8563-45c4-87fc-616641063eb8:fx"
 
 
-def translate_sentences(text: List[str]) -> List[Dict[str, str]]:
+def add_author_and_date(author: str, date: str, url: str) -> str:
+    return (f"{author}\n"
+            f"{date}\n"
+            f"Перевёл на русский tslava. Оригинальная статья: {url}\n")
+
+
+def add_footer() -> str:
+    return "Telegram канал: https://t.me/polish_stories\nПрисоединяйтесь!"
+
+
+def translate_sentences(
+        text: List[str],
+        url: str,
+        autor: str,
+        date: str,
+) -> List[Dict[str, str]]:
     '''
     :param text: массив предложений
     :return: массив словарей, где ключ - язык, значение - предложение.
@@ -35,6 +50,14 @@ def translate_sentences(text: List[str]) -> List[Dict[str, str]]:
             'ru': translation.text,
             'pl': sentence.rstrip()
         } for sentence, translation in zip(text, translated_text)]
+
+    translated_text.insert(0, {
+        "header": add_author_and_date(autor, date, url),
+    })
+
+    translated_text.append({
+        "footer": add_footer(),
+    })
 
     print(f"Done.\n")
 

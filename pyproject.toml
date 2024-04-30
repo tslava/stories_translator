@@ -14,6 +14,7 @@ deepl = "^1.17.0"
 pysbd = "^0.3.4"
 spacy = "^3.7.4"
 telegraph = "^2.2.0"
+python-substack = "^0.1.15"
 
 
 [build-system]
