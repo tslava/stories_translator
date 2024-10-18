@@ -1,11 +1,7 @@
 import json
 
-import nltk
-import pysbd
 import spacy
 from spacy.language import Language
-
-from spacy.lang.pl import Polish
 
 
 # spacy
@@ -30,19 +26,6 @@ def split_into_sentences(text):
 
     print(f"Done.\n")
     return sentences
-
-
-# ntlk
-# def split_into_sentences(text):
-#     nltk.download('punkt')
-#     sentences = nltk.tokenize.sent_tokenize(text, language='polish')
-#     return sentences
-
-# pysbd
-# def split_into_sentences(text):
-#     seg = pysbd.Segmenter(language="pl", clean=True)
-#     res = seg.segment(text)
-#     return res
 
 
 if __name__ == "__main__":

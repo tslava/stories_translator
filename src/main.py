@@ -16,7 +16,14 @@ def get_article_title_from_url(url: str) -> str:
     return url.split("/")[-1].replace(".", "_")[:40]
 
 
-def run(stage: Stage, title: str, url: Optional[str] = None, autor: Optional[str] = None, date: Optional[str] = None):
+def run(
+        stage: Stage,
+        title: str,
+        url: Optional[str] = None,
+        autor: Optional[str] = None,
+        date: Optional[str] = None,
+        source_lang: Optional[str] = 'polish'
+):
     if stage == Stage.EXTRACT:
         extracted_text = extract_text(url)
         save_text_to_file(title, stage, extracted_text)
@@ -27,7 +34,7 @@ def run(stage: Stage, title: str, url: Optional[str] = None, autor: Optional[str
         extracted_text = read_text_from_file(title, stage)
         splitted_sentences = split_into_sentences(extracted_text)
 
-        translated_sentences = translate_sentences(splitted_sentences, url, autor, date)
+        translated_sentences = translate_sentences(splitted_sentences, url, autor, date, source_lang)
         save_text_to_file(title, stage, translated_sentences)
 
         return
@@ -50,18 +57,20 @@ def run(stage: Stage, title: str, url: Optional[str] = None, autor: Optional[str
 
 
 if __name__ == "__main__":
-    url = "https://podroze.onet.pl/aktualnosci/to-jedyny-taki-pingwin-na-swiecie-spotkacie-go-w-gdanskim-zoo/7cy0d2y"
-    number = 52
-    date = "27 марта 2024"
-    autor = "KWS"
+    url = "https://www.trojmiasto.pl/moto/Kabrioletem-przewozil-plyty-gipsowe-n194722.html"
+    number = 90
+    date = "16 ноября 2024"
+    autor = "Янэк Михалак (Janek Michalak)"
 
     # title = f"0{number}_{get_article_title_from_url(url)}"
-    title = f"0{number}_to-jedyny-taki-pingwin-na-swiecie"
+    title = f"0{number}_kabrioletem_przewozil_plyty_gipsowe"
+
+    source_lang = 'polish'
 
     if not os.path.exists(f"generated/{title}"):
         run(stage=Stage.EXTRACT, title=title, url=url, autor=autor, date=date)
     elif not os.path.exists(f"generated/{title}/translated_{title}.json"):
-        run(stage=Stage.TRANSLATE, title=title, url=url, autor=autor, date=date)
+        run(stage=Stage.TRANSLATE, title=title, url=url, autor=autor, date=date, source_lang=source_lang)
     elif not os.path.exists(f"generated/{title}/formatted_{title}_RU-PL.txt"):
         run(stage=Stage.FORMAT, title=title)
     else:

@@ -1,16 +1,13 @@
 from typing import Dict
 from typing import List
 
-import requests
-import json
-
-from deepl import Formality
-from deepl import SplitSentences
-from deepl import Translator
-
-from src.splitter import split_into_sentences
+from openai import OpenAI
 
 DEEPL_AUTH_KEY = "ac85b0d0-8563-45c4-87fc-616641063eb8:fx"
+
+openai_client = OpenAI(
+    api_key="sk-REDACTED",
+)
 
 
 def add_author_and_date(author: str, date: str, url: str) -> str:
@@ -28,6 +25,8 @@ def translate_sentences(
         url: str,
         autor: str,
         date: str,
+        source_lang: str,
+        translator_type: str = "chatgpt"
 ) -> List[Dict[str, str]]:
     '''
     :param text: массив предложений
@@ -36,19 +35,18 @@ def translate_sentences(
     '''
     print("Translating sentences...")
 
-    translator = Translator(DEEPL_AUTH_KEY)
-    translated_text = translator.translate_text(
-        text=text,
-        source_lang="PL",
-        target_lang="RU",
-        formality=Formality.MORE,
-        # split_sentences=SplitSentences.ALL
-    )
+    translated_text = []
+
+    for sentence in text:
+        if translator_type == "chatgpt":
+            translated_text.append(translate_sentence_with_openai_api(sentence, source_lang=source_lang))
+        else:
+            raise ValueError(f"Unknown translator type: {translator_type}")
 
     translated_text = [
         {
-            'ru': translation.text,
-            'pl': sentence.rstrip()
+            'ru': translation,
+            'pl': sentence.rstrip(),
         } for sentence, translation in zip(text, translated_text)]
 
     translated_text.insert(0, {
@@ -64,12 +62,25 @@ def translate_sentences(
     return translated_text
 
 
-if __name__ == "__main__":
-    # read text from file extracted_text.txt
-    with open('extracted_text.txt', 'r', encoding='utf-8') as file:
-        text = file.read()
-        sentences = split_into_sentences(text)
+def translate_sentence_with_openai_api(sentence: str, source_lang: str = "polish") -> str:
 
-    # translated_text = translate_sentences(text)
-    translated_text = translate_sentences(sentences)
-    print(json.dumps(translated_text, indent=4, ensure_ascii=False))
+    has_newline_at_the_end = sentence.endswith("\n")
+
+    chat_completion = openai_client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system",
+             "content": f"You are a translator from {source_lang.upper()} to Russian, preparing translations for those who are beginning to learn {source_lang.upper()}."},
+            {"role": "user",
+             "content": f"Translate the following {source_lang.upper()} sentence to Russian as close as possible, preserving the word order: {sentence}"}
+        ],
+        max_tokens=500,
+        temperature=0.5
+    )
+
+    translated = chat_completion.choices[0].message.content.strip()
+
+    if has_newline_at_the_end:
+        translated = translated + "\n"
+
+    return translated

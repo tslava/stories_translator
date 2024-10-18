@@ -15,7 +15,9 @@ pysbd = "^0.3.4"
 spacy = "^3.7.4"
 telegraph = "^2.2.0"
 python-substack = "^0.1.15"
-
+kat = "^0.1.10"
+openai = "^1.31.0"
+pydantic = "^2.8.2"
 
 [build-system]
 requires = ["poetry-core"]
