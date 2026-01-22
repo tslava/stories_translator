@@ -1,23 +1,25 @@
+import os
 from typing import Dict
 from typing import List
 
 from openai import OpenAI
 
-DEEPL_AUTH_KEY = "ac85b0d0-8563-45c4-87fc-616641063eb8:fx"
+# API keys loaded from environment variables
+DEEPL_AUTH_KEY = os.environ.get("DEEPL_AUTH_KEY")
 
 openai_client = OpenAI(
-    api_key="sk-REDACTED",
+    api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
 
 def add_author_and_date(author: str, date: str, url: str) -> str:
     return (f"{author}\n"
             f"{date}\n"
-            f"Перевёл на русский tslava. Оригинальная статья: {url}\n")
+            f"Translated to Russian by tslava. Original article: {url}\n")
 
 
 def add_footer() -> str:
-    return "Telegram канал: https://t.me/polish_stories\nПрисоединяйтесь!"
+    return "Telegram channel: https://t.me/polish_stories\nJoin us!"
 
 
 def translate_sentences(
@@ -28,11 +30,13 @@ def translate_sentences(
         source_lang: str,
         translator_type: str = "chatgpt"
 ) -> List[Dict[str, str]]:
-    '''
-    :param text: массив предложений
-    :return: массив словарей, где ключ - язык, значение - предложение.
-    В каждом словаре содержится перевод исходного предложения на русский и оригинальное польское предложени
-    '''
+    """
+    Translate a list of sentences from source language to Russian.
+
+    :param text: Array of sentences to translate
+    :return: Array of dictionaries where key is language code, value is the sentence.
+             Each dictionary contains the Russian translation and the original Polish sentence.
+    """
     print("Translating sentences...")
 
     translated_text = []

@@ -24,15 +24,16 @@ def get_html_tag_for_image(title: str, image_file_name: str) -> str:
 
 
 def format_text(title: str, sentences: List[Dict[str, str]], language: Language):
-    '''
+    """
+    Format translated sentences into the desired output format.
 
-    :param title:
-    :param sentences: массив словарей, где ключ - язык, значение - предложение.
-    В каждом словаре содержится перевод исходного предложения на русский и оригинальное польское предложени
-    Пример: [{'ru': 'привет', 'pl': 'cześć'}, {'ru': 'как дела?', 'pl': 'jak się masz?'}]
-    :return: Текст, в котором каждое предложение на русском и польском языке разделено переносом строки,
-    и каждая пара предложений разделена пустой строкой
-    '''
+    :param title: Article title (used for image path resolution)
+    :param sentences: Array of dictionaries where key is language code, value is the sentence.
+                      Each dictionary contains the Russian translation and the original Polish sentence.
+                      Example: [{'ru': 'hello', 'pl': 'cześć'}, {'ru': 'how are you?', 'pl': 'jak się masz?'}]
+    :return: Formatted text where each Russian and Polish sentence pair is separated by a newline,
+             and each pair is separated by an empty line.
+    """
     print(f"Formatting text...")
 
     formatted_text = ''
@@ -47,7 +48,7 @@ def format_text(title: str, sentences: List[Dict[str, str]], language: Language)
             formatted_text += f"\n{image_url}\n"
         if language == Language.RU:
             if 'ru' in sentence:
-                formatted_text += f"{sentence['ru']} "  # TODO: сделать что-то с переносом пробела после символа переноа строки
+                formatted_text += f"{sentence['ru']} "  # TODO: handle space after newline character
         # elif language == Language.PL:
         #     if 'pl' in sentence:
         #         formatted_text += f"{sentence['pl']} "
