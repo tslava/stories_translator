@@ -69,4 +69,4 @@ The pipeline will automatically detect which stage to run based on existing file
 
 ---
 
-Built by [Wiaczeslaw Cyunczyk](https://cyunczyk.dev)
+Built by [Wiaczeslaw Cyunczyk](https://tslava.dev)
