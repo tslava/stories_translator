@@ -1,6 +1,15 @@
 # stories_translator
 
-A Python pipeline for extracting Polish articles from websites, translating them to Russian, and formatting bilingual (Russian-Polish) content for the Telegram channel "Polish Stories Club".
+**Turns a Polish news story into bilingual reading practice.** The pipeline extracts the article, splits it into sentences, translates each sentence with an LLM and lays the result out as Polish-Russian pairs plus a Russian-only version, ready to publish on Telegraph for a Telegram channel of Russian speakers learning Polish. Two manual review steps keep the translation honest.
+
+```mermaid
+flowchart LR
+  url[Article URL] --> ext[extract<br/>Trafilatura] --> rev1{{manual cleanup}} --> split[split<br/>spaCy pl] --> tr[translate<br/>OpenAI, per sentence] --> rev2{{manual review}} --> fmt[format<br/>RU-PL and RU] --> pub[publish<br/>Telegraph]
+```
+
+**Stack:** Python · Trafilatura · spaCy (`pl_core_news_lg`) · OpenAI API · Telegraph API · Poetry
+
+Generated articles are not kept in this repository: the source texts belong to their publishers.
 
 ## Pipeline Overview
 
@@ -53,3 +62,11 @@ The pipeline will automatically detect which stage to run based on existing file
 ### Low Priority
 - Add URL cache for images to avoid uploading the same image twice for RU and RU-PL versions
 - Add Russian announcement text generation for Telegram channel (may be expensive on API)
+
+## License
+
+[MIT](LICENSE)
+
+---
+
+Built by [Wiaczeslaw Cyunczyk](https://cyunczyk.dev)
